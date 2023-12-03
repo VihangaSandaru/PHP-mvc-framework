@@ -7,6 +7,14 @@ Trait Model {
     // protected $table = 'users';
     protected $limit = 10;
     protected $offset = 0;
+    protected $order_type = "desc";
+    protected $order_column = "id";
+
+    public function findAll(){
+        $query = "select * from $this->table order by $this->order_column $this->order_type limit $this->limit offset $this->offset";
+
+        return $this->query($query);
+    }
 
     public function where($data, $data_not=[]){
         $keys = array_keys($data);
@@ -21,7 +29,7 @@ Trait Model {
         }
         $query = trim($query, " && ");
 
-        $query .= " limit $this->limit offset $this->offset";
+        $query .= "order by $this->order_column $this->order_type limit $this->limit offset $this->offset";
         $data = array_merge($data, $data_not);
         return $this->query($query, $data);   // fetch wena object okkoma metanin return weno
 
@@ -52,6 +60,16 @@ Trait Model {
     }
     public function insert($data){
 
+        /* removed not allowed access to data */
+
+        if(!empty($this->allowedColumns)){
+            foreach($data as $key){
+                if(!in_array($key, $this->allowedColumns)){
+                    unset($data[$key]);
+                }
+            }
+        }
+
         $keys= array_keys($data);
         // $query = "insert into $this->table (";
 
@@ -69,7 +87,7 @@ Trait Model {
         // echo $query;
 
         $query = "insert into $this->table (".implode(",", $keys).") values (:".implode(",:", $keys).")";
-        echo $query;
+        // echo $query;
 
         $this->query($query, $data);
         echo "Insertion successful";
@@ -77,6 +95,16 @@ Trait Model {
         
     }
     public function update($id, $data, $id_column = 'id'){
+
+        /* removed not allowed access to data */
+
+        if(!empty($this->allowedColumns)){
+            foreach($data as $key){
+                if(!in_array($key, $this->allowedColumns)){
+                    unset($data[$key]);
+                }
+            }
+        }
 
         $keys=array_keys($data);
         $data[$id_column] = $id;

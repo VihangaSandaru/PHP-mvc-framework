@@ -1,20 +1,23 @@
 <?php
-class Home extends Controller{
-   
-    public function index($a = '', $b = '', $c=''){
+
+class Home{
+
+    use Controller;
+    public function index(){
         
-        $model = new Model ;
+        $user = new User;
         // $arr['id'] = 6;
-        $arr = array("name" => "chamod", "age"=> 19, "date" => "2023-11-26 20:33:31.526526");
+        // $arr = array("name" => "sahan", "age"=> 45, "date" => "2023-12-01 11:24:31.526526");
         // $result = $model->where($arr);
-        // $result = $model->insert($arr);
+        // $result = $model->insert($arr);  model kiyana thanata user hri product kiyala hari danna one 
         // $result = $model->delete(5);
         // show($result);
 
-        $result = $model->update(3, $arr);
-        
 
-        echo "This is the home controller";
+        // $result = $user->findAll();
+        // show($result);
+
+        // echo "This is the home controller";
         $this->view('home');
     }
 }
